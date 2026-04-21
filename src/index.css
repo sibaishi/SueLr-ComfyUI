@@ -1,0 +1,412 @@
+@import "tailwindcss";
+/* React Flow v12 样式 - 必须在 tailwindcss 之后导入 */
+@import "@xyflow/react/dist/style.css";
+
+/* ============================================================
+   Flow Studio - 全局样式
+   iOS 毛玻璃风格 + 深色/浅色主题
+   ============================================================ */
+
+/* ---- CSS 自定义属性（设计 Token）---- */
+:root {
+  /* 浅色主题 */
+  --color-bg-primary: #f2f2f7;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f9f9fb;
+  --color-bg-canvas: #e8e8ed;
+  --color-text-primary: #1c1c1e;
+  --color-text-secondary: #6e6e73;
+  --color-text-tertiary: #aeaeb2;
+  --color-text-quaternary: #c7c7cc;
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-strong: rgba(0, 0, 0, 0.15);
+  --color-accent: #007AFF;
+  --color-accent-hover: #0056CC;
+  --color-danger: #FF3B30;
+  --color-success: #30D158;
+  --color-warning: #FF9500;
+
+  /* 毛玻璃效果 */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-hover: rgba(255, 255, 255, 0.85);
+  --glass-bg-active: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  --glass-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-blur: blur(20px);
+
+  /* 布局尺寸 */
+  --toolbar-height: 48px;
+  --sidebar-width: 220px;
+  --panel-width: 300px;
+  --statusbar-height: 28px;
+
+  /* 圆角 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* 动画 */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+.dark {
+  --color-bg-primary: #1c1c1e;
+  --color-bg-secondary: #2c2c2e;
+  --color-bg-tertiary: #242426;
+  --color-bg-canvas: #141416;
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #98989d;
+  --color-text-tertiary: #636366;
+  --color-text-quaternary: #48484a;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
+
+  --glass-bg: rgba(44, 44, 46, 0.72);
+  --glass-bg-hover: rgba(58, 58, 60, 0.85);
+  --glass-bg-active: rgba(58, 58, 60, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+  --glass-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* ---- 基础样式 ---- */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+/* ---- 毛玻璃工具类 ---- */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-hover:hover {
+  background: var(--glass-bg-hover);
+}
+
+.glass-active:active {
+  background: var(--glass-bg-active);
+}
+
+/* ---- 滚动条样式 ---- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-tertiary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* ============================================================
+   React Flow v12 样式覆盖
+   ============================================================ */
+
+/* 画布背景 */
+.react-flow {
+  background: var(--color-bg-canvas) !important;
+}
+
+/* 网格点颜色 */
+.react-flow__background {
+  opacity: 0.3;
+}
+
+/* ---- 节点样式 ---- */
+.react-flow__node {
+  /* 确保 wrapper 不添加额外间距，子节点可正确填满 */
+  padding: 0 !important;
+  /* 明确 block 布局，确保 width/height: 100% 的子元素能正确计算 */
+  display: block;
+  /* 不需要 min-width: fit-content，因为 .flow-node 使用固定的初始宽度
+     wrapper 会自动跟随节点尺寸 */
+  /* 隐藏 wrapper 默认背景和边框，只显示自定义 .flow-node 的样式 */
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.react-flow__node.selected {
+  /* 选中时的高亮由自定义节点组件自行处理 */
+}
+
+/* ---- 连线样式 ---- */
+.react-flow__edge-path {
+  stroke: var(--color-text-tertiary);
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+}
+
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke: var(--color-accent);
+}
+
+/* ---- 端口 Handle 样式 ---- */
+.react-flow__handle {
+  width: 10px !important;
+  height: 10px !important;
+  border: 2px solid var(--color-bg-secondary) !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.react-flow__handle:hover {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+}
+
+/* 连线时有效目标的 handle 高亮 */
+.react-flow__handle.connecting {
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+}
+
+.react-flow__handle.valid {
+  box-shadow: 0 0 0 3px rgba(48, 209, 88, 0.3);
+}
+
+/* ---- 连线过程中的临时线 ---- */
+.react-flow__connection-path {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+
+/* ---- 选区框 ---- */
+.react-flow__selection {
+  background: rgba(0, 122, 255, 0.08);
+  border: 1px dashed rgba(0, 122, 255, 0.5);
+}
+
+/* ---- 控件面板 ---- */
+.react-flow__controls {
+  border-radius: var(--radius-md) !important;
+  overflow: hidden;
+  box-shadow: var(--glass-shadow) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+.react-flow__controls-button {
+  background: var(--glass-bg) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  fill: var(--color-text-secondary) !important;
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--glass-bg-hover) !important;
+  fill: var(--color-text-primary) !important;
+}
+
+.react-flow__controls-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---- 小地图 ---- */
+.react-flow__minimap {
+  background: var(--glass-bg) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+}
+
+.react-flow__minimap svg {
+  border-radius: var(--radius-md);
+}
+
+/* Minimap 中的节点 */
+.react-flow__minimap-node {
+  rx: 3;
+  ry: 3;
+}
+
+/* ---- 自定义节点样式 ---- */
+.flow-node {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.flow-node:hover {
+  box-shadow: var(--glass-shadow-lg);
+}
+
+/* ---- 节点调整大小手柄样式 ---- */
+
+/* 基础：手柄和线条默认不可见 */
+.react-flow__resize-control {
+  z-index: 10 !important;
+}
+
+/* 角落手柄（圆形拖拽点） */
+.react-flow__resize-control.handle {
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.15s ease !important;
+  /* 注意：不要设 position: relative，手柄默认是 absolute（不占空间）*/
+}
+
+.react-flow__resize-control.handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  /* 扩大点击区域，但不显示 */
+}
+
+/* 悬停时放大 */
+.react-flow__resize-control.handle:hover {
+  opacity: 1 !important;
+  transform: scale(1.25);
+}
+
+/* 选中或悬停节点时显示手柄 */
+.flow-node:hover .react-flow__resize-control.handle,
+.react-flow__node-selected .react-flow__resize-control.handle {
+  opacity: 1 !important;
+}
+
+/* 边缘手柄（线条）— 始终透明但可交互 */
+.react-flow__resize-control.line {
+  border: none !important;
+  background: transparent !important;
+  /* 注意：不要设 position: relative，手柄默认是 absolute（不占空间）*/
+}
+
+.react-flow__resize-control.line::after {
+  content: '';
+  position: absolute;
+}
+
+/* 上/下边缘线 — 加高点击区域 */
+.react-flow__resize-control.line[data-handle-position="top"],
+.react-flow__resize-control.line[data-handle-position="bottom"] {
+  height: 10px !important;
+}
+
+.react-flow__resize-control.line[data-handle-position="top"]::after,
+.react-flow__resize-control.line[data-handle-position="bottom"]::after {
+  top: -6px;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+}
+
+/* 左/右边缘线 — 加宽点击区域 */
+.react-flow__resize-control.line[data-handle-position="left"],
+.react-flow__resize-control.line[data-handle-position="right"] {
+  width: 10px !important;
+}
+
+.react-flow__resize-control.line[data-handle-position="left"]::after,
+.react-flow__resize-control.line[data-handle-position="right"]::after {
+  left: -6px;
+  top: 0;
+  bottom: 0;
+  right: -6px;
+}
+
+/* ---- 脉冲动画（节点执行中 — 彩虹边框）---- */
+@keyframes pulse-border {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.4), var(--glass-shadow-lg);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 149, 0, 0.1), var(--glass-shadow-lg);
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* ---- 淡入动画 ---- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal);
+}
+
+/* ---- Slider 自定义样式 ---- */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ---- 文本截断工具 ---- */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
